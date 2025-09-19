@@ -1,96 +1,100 @@
-Setup and Run Guide (Windows)
+# Backend Setup (FastAPI + PostgreSQL + GIS)
 
-This project includes a FastAPI backend and a Vite + React frontend. Follow the steps below to install dependencies, configure the environment, run database migrations, and start both services.
+This backend uses **FastAPI** as the web framework, **Uvicorn** as the ASGI server, **SQLAlchemy** for ORM/database access, **PostgreSQL** as the database, and GIS libraries like **Rasterio** for geospatial processing.
 
-### Prerequisites
-- **Python** 3.11+
-- **Node.js** 18+ (or 20+) and **npm** 9+
-- **PostgreSQL** 14+ (local user with created DB)
-- **Git**
+---
 
-### 1) Clone and enter the project
-```powershell
-git clone <your-repo-url> ml_prediction
-cd ml_prediction
+## 🚀 Prerequisites
+- Python 3.12+
+- PostgreSQL (installed and running)
+- (Optional but recommended) `conda` or `venv` for virtual environments
+
+---
+
+## 📦 Install Dependencies
+
+Run these commands to install required packages:
+
+### Core FastAPI + Server
+```bash
+pip install fastapi
+pip install "uvicorn[standard]"
+
+Database + ORM
+pip install sqlalchemy
+pip install psycopg2-binary   # PostgreSQL driver
+
+Authentication / Security
+pip install "python-jose[cryptography]"
+pip install "passlib[bcrypt]"
+pip install python-multipart
+
+
+Data Processing
+
+pip install numpy
+pip install pandas
+
+GIS / Geospatial
+pip install rasterio
+pip install gdal
+
+Run the App
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-### 2) Backend (FastAPI) — install Python dependencies
-Create a virtual environment and install packages.
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install --upgrade pip
-pip install fastapi uvicorn[standard] python-dotenv SQLAlchemy alembic psycopg2-binary passlib[bcrypt] python-jose[cryptography] httpx pydantic numpy rasterio
-```
+# 🚀 Frontend Setup Guide (Vite + React + Tailwind)
 
-If `rasterio` fails to build on Windows, either:
-- Install a prebuilt wheel from `https://www.lfd.uci.edu/~gohlke/pythonlibs/`, or
-- Try: `pip install rasterio==1.3.10`
+This project uses **Vite** as the build tool, **React** for UI, **TailwindCSS** for styling, **React Router** for routing, **Axios** for API calls, and **TanStack Table** for data grids.
 
-### 3) Configure environment (.env)
-Create a `.env` file in the project root (same folder as `main.py`).
-```
-# JWT
-SECRET_KEY=change-me
-ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=30
+---
 
-# Database (PostgreSQL)
-DATABASE_URL=postgresql+psycopg2://postgres:yourpassword@localhost:5432/fastapi_backend
+## ⚙️ Prerequisites
+- [Node.js](https://nodejs.org/) (>= 18.x recommended)  
+- npm (comes with Node)
 
-# Optional Google OAuth
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-GOOGLE_REDIRECT_URI=http://127.0.0.1:8000/auth/google/callback
+---
 
-# Optional Postgres conn parts for scripts
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5432
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=yourpassword
-POSTGRES_DB=fastapi_backend
-```
+## 📦 Installation & Setup
 
-### 4) Database setup and migrations
-Create the database in PostgreSQL (example shown for psql):
-```sql
-CREATE DATABASE fastapi_backend;
-```
-Then apply Alembic migrations:
-```powershell
-alembic upgrade head
-```
+Run the following commands **inside the `frontend` folder**.
 
-### 5) Optional seeding utilities
-Run any of the following if you need demo data or generated files:
-```powershell
-python .\scripts\seed_shapefiles.py
-python .\scripts\seed_rasters_auto.py
-python .\scripts\export_lulc_geojson.py
-```
+### 1️⃣ Install Core Dependencies
 
-### 6) Start the backend (FastAPI)
-```powershell
-.\.venv\Scripts\Activate.ps1
-uvicorn main:app --reload --host 127.0.0.1 --port 8000
-```
-FastAPI docs: `http://127.0.0.1:8000/docs`
+```bash
+# React Core
+npm install --force react
+npm install --force react-dom
 
-### 7) Frontend (Vite + React) — install and run
-```powershell
-cd .\frontend
-npm ci
+# Router
+npm install --force react-router-dom
+npm install -D --force @types/react-router-dom
+
+# HTTP Client
+npm install --force axios
+npm install -D --force @types/axios
+
+# Table Library
+npm install --force @tanstack/react-table
+
+# TailwindCSS + PostCSS stack
+npm install --force tailwindcss
+npm install --force postcss
+npm install --force autoprefixer
+
+# Vite React Plugin
+npm install --force @vitejs/plugin-react
+
+# TypeScript + Types (if using .tsx)
+npm install -D --force typescript
+npm install -D --force @types/react
+npm install -D --force @types/react-dom
+
+# Initialize TailwindCSS
+npx tailwindcss init -p
+
+# Run Development Server
 npm run dev
 ```
-The dev server URL will be shown in the console (usually `http://127.0.0.1:5173`).
-
-### Notes
-- The backend statically serves GeoJSON files from `/geojson` mapped to the `geojson_exports` directory.
-- CORS is configured to allow requests from `localhost` and `127.0.0.1` on any port.
-- If you need to change DB credentials or ports, update them in `.env` and re-run services.
-
-### Dependency Reference
-- Backend (pip): `fastapi`, `uvicorn[standard]`, `python-dotenv`, `SQLAlchemy`, `alembic`, `psycopg2-binary`, `passlib[bcrypt]`, `python-jose[cryptography]`, `httpx`, `pydantic`, `numpy`, `rasterio`.
-- Frontend: Managed by `frontend/package.json` (React 19, Vite, TypeScript, Tailwind CSS 4, Radix UI, Leaflet, React-Leaflet, etc.). Use `npm ci` to install.
 
 
