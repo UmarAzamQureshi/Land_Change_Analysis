@@ -1,0 +1,1 @@
+from app.interfaces.api.fastapi_app import app
