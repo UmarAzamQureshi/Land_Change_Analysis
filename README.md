@@ -1,4 +1,4 @@
-## ml_prediction — Setup and Run Guide (Windows)
+Setup and Run Guide (Windows)
 
 This project includes a FastAPI backend and a Vite + React frontend. Follow the steps below to install dependencies, configure the environment, run database migrations, and start both services.
 
